@@ -1,0 +1,53 @@
+p{
+    margin: 0;
+    color: grey;
+}
+
+h4{
+    color: rgb(85, 85, 85);
+}
+
+.results{
+    float: right;
+    width: 700px;
+}
+
+.submit{
+    background-color: rgb(255, 181, 69);
+    color: white;
+    border: 0;
+    width: 700px;
+    height: 40px;
+    font-size: 15px;
+}
+
+.more{
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.companyAndPrice{
+    background-color: rgb(21, 159, 228);
+    color: white;
+    height: 40px;
+}
+
+.searchResults{
+    margin-top: 50px;
+    margin-left: 10px;
+}
+
+hr{
+    background-color: rgb(21, 159, 228);
+    border: 0;
+    height: 3px;
+}
+
+.firstRoute{
+    margin-left: 10px;
+}
+.secondRoute{
+    margin-left: 10px;
+}
+
