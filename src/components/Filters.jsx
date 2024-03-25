@@ -6,6 +6,8 @@ export default function Filters({ tickets, sorting, defaultTickets }) {
                 <h4>Сортировать</h4>
                 <div>
                     <input onChange={() => {
+                        tickets = defaultTickets;
+                        console.log(tickets);
                         sorting(
                             [...tickets].sort(function (a, b) {
                                 return a.price.total.amount - b.price.total.amount;
@@ -15,15 +17,26 @@ export default function Filters({ tickets, sorting, defaultTickets }) {
                 </div>
                 <div>
                     <input onChange={() => {
+                        tickets = defaultTickets;
                         sorting(
                             [...tickets].sort(function (a, b) {
+                                console.log(b.price.total.amount);
+                                console.log(a.price.total.amount);
                                 return b.price.total.amount - a.price.total.amount;
                             }))
                     }}
                         type="radio" name="sorting" />- по убыванию цены
                 </div>
                 <div>
-                    <input onChange={() => { console.log('sort by time (from low to high)'); }} type="radio" name="sorting" />- по времени в пути
+                    <input onChange={() => {
+                        sorting(
+                            [...tickets].sort(function (a, b) {
+                                let durationTimeA = a.legs[0].duration + a.legs[1].duration;
+                                let durationTimeB = b.legs[0].duration + b.legs[1].duration;
+                                return durationTimeA - durationTimeB;
+                            }))
+                    }}
+                        type="radio" name="sorting" />- по времени в пути
                 </div>
                 <div>
                     <input onChange={() => {
