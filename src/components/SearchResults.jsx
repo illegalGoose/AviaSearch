@@ -1,18 +1,11 @@
-import data from '../flights.json';
+import { useState } from 'react';
 import Divider from '@mui/material/Divider';
 
-export default function SearchResults() {
-    const tickets = [];
-
-    for (const ticket of data.result.flights) {
-        tickets.push(ticket.flight);
-    }
-
-    console.log(tickets);
-    // console.log(data);
+export default function SearchResults({ tickets }) {
+    const [ticketsNum, setTicketsNum] = useState(2);
 
     return (
-        tickets.map(item => {
+        tickets.slice(0, ticketsNum).map((item, index) => {
             return <div className='results' style={{marginBottom: 25, fontFamily: 'sans-serif'}}>
                 {
                     item.legs.map((leg, index) => {
@@ -68,11 +61,16 @@ export default function SearchResults() {
                                     firstSegment.hasOwnProperty('operatingAirline') == true ? firstSegment.operatingAirline.caption : 
                                         airline}
                                 </div>
-                                {index === 0 ? <hr style={{backgroundColor: "dodgerblue", border: "1px solid dodgerblue"}}/> : <button onMouseOver={event => {event.target.style.backgroundColor = "#d28800"}} onMouseLeave={event => {event.target.style.backgroundColor = "orange"}}  style={{border: 0, color: "white", backgroundColor: "orange", width: "100%", height: 35, marginTop: 5}}>ВЫБРАТЬ</button>}
+                                {index === 0 ? <hr style={{backgroundColor: "dodgerblue", border: "1px solid dodgerblue"}}/> : <button onClick={() => {alert("Well, ticket has been selected")}} onMouseOver={event => {event.target.style.backgroundColor = "#d28800"}} onMouseLeave={event => {event.target.style.backgroundColor = "orange"}}  style={{border: 0, color: "white", backgroundColor: "orange", width: "100%", height: 35, marginTop: 5}}>ВЫБРАТЬ</button>}
                                                              
                             </div>
                         )
                    })
+                }
+                {index === ticketsNum - 1 ? 
+                    <div style={{display: 'flex', justifyContent: 'center', marginTop: 10}}>
+                        <button onClick={() => setTicketsNum(ticketsNum + 2)} style={{width: 200, height: 30, fontSize: 17}}>Показать еще</button>
+                    </div> : null
                 }
             </div>
         }
