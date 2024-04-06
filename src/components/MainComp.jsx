@@ -3,14 +3,14 @@ import SearchResults from './SearchResults';
 import data from '../flights.json';
 import { useState } from 'react';
 
-export default function MainComp(){
-    const [tickets, setSorting] = useState([]);
-    const defaultTickets = [];
+const defaultTickets = [];
 
     for (const ticket of data.result.flights) {
-        tickets.push(ticket.flight);
         defaultTickets.push(ticket.flight);
     }
+    
+export default function MainComp(){
+    const [tickets, setSorting] = useState(defaultTickets);
     return (
         <div style={{display: 'flex', gap: 30}}>
             <Filters tickets={tickets} sorting={setSorting} defaultTickets={defaultTickets}/>

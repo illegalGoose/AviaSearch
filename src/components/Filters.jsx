@@ -1,15 +1,12 @@
-
-export default function Filters({ tickets, sorting, defaultTickets }) {
+export default function Filters({ sorting, defaultTickets }) {
     return (
         <div style={{ fontFamily: 'sans-serif', width: 200 }}>
             <div className="sorting">
                 <h4>Сортировать</h4>
                 <div>
                     <input onChange={() => {
-                        tickets = defaultTickets;
-                        console.log(tickets);
                         sorting(
-                            [...tickets].sort(function (a, b) {
+                            [...defaultTickets].sort(function (a, b) {
                                 return a.price.total.amount - b.price.total.amount;
                             }))
                     }}
@@ -17,11 +14,8 @@ export default function Filters({ tickets, sorting, defaultTickets }) {
                 </div>
                 <div>
                     <input onChange={() => {
-                        tickets = defaultTickets;
                         sorting(
-                            [...tickets].sort(function (a, b) {
-                                console.log(b.price.total.amount);
-                                console.log(a.price.total.amount);
+                            [...defaultTickets].sort(function (a, b) {
                                 return b.price.total.amount - a.price.total.amount;
                             }))
                     }}
@@ -30,11 +24,12 @@ export default function Filters({ tickets, sorting, defaultTickets }) {
                 <div>
                     <input onChange={() => {
                         sorting(
-                            [...tickets].sort(function (a, b) {
+                            [...defaultTickets].sort(function (a, b) {
                                 let durationTimeA = a.legs[0].duration + a.legs[1].duration;
                                 let durationTimeB = b.legs[0].duration + b.legs[1].duration;
                                 return durationTimeA - durationTimeB;
-                            }))
+                            })
+                        )
                     }}
                         type="radio" name="sorting" />- по времени в пути
                 </div>
@@ -47,8 +42,30 @@ export default function Filters({ tickets, sorting, defaultTickets }) {
             </div>
             <div className="filtering">
                 <h4>Фильтровать</h4>
-                <div><input type="checkbox" name="transfer" />- 1 пересадка</div>
-                <div><input type="checkbox" name="without transfer" />- без пересадок</div>
+                <div><input onChange={(event) => {
+                    if (event.currentTarget.checked) {
+                        sorting(
+                            defaultTickets.filter(function (ticket) {
+                                return ticket.legs[0].segments.length == 2 || ticket.legs[1].segments.length == 2;
+                            })
+                        )
+                    } else {
+                        sorting(defaultTickets);
+                    }
+                }}
+                    type="checkbox" name="transfer" />- 1 пересадка</div>
+                <div><input onChange={(event) => {
+                    if (event.currentTarget.checked) {
+                        sorting(
+                            defaultTickets.filter(function (ticket) {
+                                return ticket.legs[0].segments.length < 2 && ticket.legs[1].segments.length < 2;
+                            })
+                        )
+                    } else {
+                        sorting(defaultTickets);
+                    }
+                }}
+                    type="checkbox" name="withoutTransfer" />- без пересадок</div>
             </div>
             <div className="price">
                 <h4>Цена</h4>
