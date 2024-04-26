@@ -1,6 +1,6 @@
 export default function Filters({ tickets, sorting, defaultTickets }) {
-  let firstInputValue = '';
-  let secondInputValue = '';
+  let firstInputValue = "";
+  let secondInputValue = "";
   return (
     <div style={{ fontFamily: "sans-serif", width: 200 }}>
       <div className="sorting">
@@ -134,44 +134,60 @@ export default function Filters({ tickets, sorting, defaultTickets }) {
       <div className="price">
         <h4>Цена</h4>
         <div style={{ marginBottom: 15 }}>
-          От <input onChange={(event) => {
-            if (event.target.value != "") {
-              sorting(
-                [...defaultTickets].filter(function (ticket) {
-                  if (Number(ticket.price.total.amount) >= Number(event.target.value)) {
-                    firstInputValue = event.target.value;
-                    return ticket;
-                  }
-                })
-              )
-            } else {
-              if (secondInputValue != ""){   // Solving the problem with both inputs value. Do with "elif"
-                sorting(tickets);
+          От{" "}
+          <input
+            onChange={(event) => {
+              if (event.target.value != "") {
+                sorting(
+                  [...defaultTickets].filter(function (ticket) {
+                    if (
+                      Number(ticket.price.total.amount) >=
+                      Number(event.target.value)
+                    ) {
+                      firstInputValue = event.target.value;
+                      return ticket;
+                    }
+                  }),
+                );
               } else {
-                sorting(defaultTickets);
-              }
-            }
-          }} type="number" />
-        </div>
-        <div>
-          До <input onChange={(event) => {
-            if (event.target.value != "") {
-              sorting(
-                [...defaultTickets].filter(function (ticket) {
-                  if (Number(ticket.price.total.amount) <= Number(event.target.value)) {
-                    secondInputValue = event.target.value;
-                    return ticket;
-                  }
-                })
-              )
-            } else {
-                if (firstInputValue != ""){   // Solving the problem with both inputs value. Do with "elif"
+                if (secondInputValue != "") {
+                  // Solving the problem with both inputs value. Do with "elif"
                   sorting(tickets);
                 } else {
                   sorting(defaultTickets);
                 }
-            }
-          }} type="number" />
+              }
+            }}
+            type="number"
+          />
+        </div>
+        <div>
+          До{" "}
+          <input
+            onChange={(event) => {
+              if (event.target.value != "") {
+                sorting(
+                  [...defaultTickets].filter(function (ticket) {
+                    if (
+                      Number(ticket.price.total.amount) <=
+                      Number(event.target.value)
+                    ) {
+                      secondInputValue = event.target.value;
+                      return ticket;
+                    }
+                  }),
+                );
+              } else {
+                if (firstInputValue != "") {
+                  // Solving the problem with both inputs value. Do with "elif"
+                  sorting(tickets);
+                } else {
+                  sorting(defaultTickets);
+                }
+              }
+            }}
+            type="number"
+          />
         </div>
       </div>
       <div className="companies">
