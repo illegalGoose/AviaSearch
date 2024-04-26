@@ -6,7 +6,7 @@ export default function SearchResults({ tickets }) {
 
     return (
         tickets.slice(0, ticketsNum).map((item, index) => {
-            return <div className='results' onClick={() => {console.log(item);}} style={{marginBottom: 25, fontFamily: 'sans-serif'}}>
+            return <div className='results' style={{marginBottom: 25, fontFamily: 'sans-serif'}}>
                 {
                     item.legs.map((leg, index) => {
                         const durationHours = Math.floor(leg.duration / 60);
