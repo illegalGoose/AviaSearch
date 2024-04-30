@@ -1,6 +1,10 @@
-export default function Filters({ tickets, sorting, defaultTickets }) {
-  let firstInputValue = "";
-  let secondInputValue = "";
+export default function Filters({
+  tickets,
+  sorting,
+  defaultTickets,
+  filtersFunction,
+}) {
+  let filters = { sorting: "", transfers: [], priceFrom: null, priceTo: null };
   return (
     <div style={{ fontFamily: "sans-serif", width: 200 }}>
       <div className="sorting">
@@ -8,19 +12,8 @@ export default function Filters({ tickets, sorting, defaultTickets }) {
         <div>
           <input
             onChange={() => {
-              if (tickets.length < defaultTickets.length) {
-                sorting(
-                  [...tickets].sort(function (a, b) {
-                    return a.price.total.amount - b.price.total.amount;
-                  }),
-                );
-              } else {
-                sorting(
-                  [...defaultTickets].sort(function (a, b) {
-                    return a.price.total.amount - b.price.total.amount;
-                  }),
-                );
-              }
+              filters.sorting = "ascending";
+              sorting(filtersFunction(tickets, filters));
             }}
             type="radio"
             name="sorting"
@@ -30,19 +23,8 @@ export default function Filters({ tickets, sorting, defaultTickets }) {
         <div>
           <input
             onChange={() => {
-              if (tickets.length < defaultTickets.length) {
-                sorting(
-                  [...tickets].sort(function (a, b) {
-                    return b.price.total.amount - a.price.total.amount;
-                  }),
-                );
-              } else {
-                sorting(
-                  [...defaultTickets].sort(function (a, b) {
-                    return b.price.total.amount - a.price.total.amount;
-                  }),
-                );
-              }
+              filters.sorting = "descending";
+              sorting(filtersFunction(tickets, filters));
             }}
             type="radio"
             name="sorting"
@@ -52,23 +34,8 @@ export default function Filters({ tickets, sorting, defaultTickets }) {
         <div>
           <input
             onChange={() => {
-              if (tickets.length < defaultTickets.length) {
-                sorting(
-                  [...tickets].sort(function (a, b) {
-                    let durationTimeA = a.legs[0].duration + a.legs[1].duration;
-                    let durationTimeB = b.legs[0].duration + b.legs[1].duration;
-                    return durationTimeA - durationTimeB;
-                  }),
-                );
-              } else {
-                sorting(
-                  [...defaultTickets].sort(function (a, b) {
-                    let durationTimeA = a.legs[0].duration + a.legs[1].duration;
-                    let durationTimeB = b.legs[0].duration + b.legs[1].duration;
-                    return durationTimeA - durationTimeB;
-                  }),
-                );
-              }
+              filters.sorting = "travelTime";
+              sorting(filtersFunction(tickets, filters));
             }}
             type="radio"
             name="sorting"
@@ -92,17 +59,17 @@ export default function Filters({ tickets, sorting, defaultTickets }) {
           <input
             onChange={(event) => {
               if (event.currentTarget.checked) {
-                sorting(
-                  defaultTickets.filter(function (ticket) {
-                    return (
-                      ticket.legs[0].segments.length == 2 ||
-                      ticket.legs[1].segments.length == 2
-                    );
-                  }),
-                );
+                if (filters.transfers.length >= 1) {
+                  filters.transfers = [1, 0];
+                } else {
+                  filters.transfers = [1];
+                }
+              } else if (filters.transfers.length > 0) {
+                filters.transfers = [0];
               } else {
-                sorting(defaultTickets);
+                filters.transfers = [];
               }
+              sorting(filtersFunction(defaultTickets, filters));
             }}
             type="checkbox"
             name="transfer"
@@ -113,17 +80,17 @@ export default function Filters({ tickets, sorting, defaultTickets }) {
           <input
             onChange={(event) => {
               if (event.currentTarget.checked) {
-                sorting(
-                  defaultTickets.filter(function (ticket) {
-                    return (
-                      ticket.legs[0].segments.length < 2 &&
-                      ticket.legs[1].segments.length < 2
-                    );
-                  }),
-                );
+                if (filters.transfers.length >= 1) {
+                  filters.transfers = [1, 0];
+                } else {
+                  filters.transfers = [0];
+                }
+              } else if (filters.transfers.length >= 1) {
+                filters.transfers = [1];
               } else {
-                sorting(defaultTickets);
+                filters.transfers = [];
               }
+              sorting(filtersFunction(defaultTickets, filters));
             }}
             type="checkbox"
             name="withoutTransfer"
@@ -137,57 +104,15 @@ export default function Filters({ tickets, sorting, defaultTickets }) {
           От{" "}
           <input
             onChange={(event) => {
-              if (event.target.value != "") {
-                sorting(
-                  [...defaultTickets].filter(function (ticket) {
-                    if (
-                      Number(ticket.price.total.amount) >=
-                      Number(event.target.value)
-                    ) {
-                      firstInputValue = event.target.value;
-                      return ticket;
-                    }
-                  }),
-                );
-              } else {
-                if (secondInputValue != "") {
-                  // Solving the problem with both inputs value. Do with "elif"
-                  sorting(tickets);
-                } else {
-                  sorting(defaultTickets);
-                }
-              }
+              filters.priceFrom = event.target.value;
+              console.log(filters.priceFrom);
+              filtersFunction(tickets, filters, sorting);
             }}
             type="number"
           />
         </div>
         <div>
-          До{" "}
-          <input
-            onChange={(event) => {
-              if (event.target.value != "") {
-                sorting(
-                  [...defaultTickets].filter(function (ticket) {
-                    if (
-                      Number(ticket.price.total.amount) <=
-                      Number(event.target.value)
-                    ) {
-                      secondInputValue = event.target.value;
-                      return ticket;
-                    }
-                  }),
-                );
-              } else {
-                if (firstInputValue != "") {
-                  // Solving the problem with both inputs value. Do with "elif"
-                  sorting(tickets);
-                } else {
-                  sorting(defaultTickets);
-                }
-              }
-            }}
-            type="number"
-          />
+          До <input type="number" />
         </div>
       </div>
       <div className="companies">
