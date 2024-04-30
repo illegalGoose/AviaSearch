@@ -106,13 +106,20 @@ export default function Filters({
             onChange={(event) => {
               filters.priceFrom = event.target.value;
               console.log(filters.priceFrom);
-              filtersFunction(tickets, filters, sorting);
+              filtersFunction(tickets, filters);
             }}
             type="number"
           />
         </div>
         <div>
-          До <input type="number" />
+          До{" "}
+          <input
+            onChange={(event) => {
+              filters.priceTo = event.target.value;
+              filtersFunction(tickets, filters);
+            }}
+            type="number"
+          />
         </div>
       </div>
       <div className="companies">

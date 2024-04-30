@@ -18,6 +18,7 @@ function copyArray(arr) {
 }
 
 function applyFilters(tickets, filters) {
+  console.log(filters);
   /**
    * Filters is an object like this:
    {
@@ -30,6 +31,7 @@ function applyFilters(tickets, filters) {
 
   let result = copyArray(tickets);
 
+  //sorting
   if (filters.sorting === "ascending") {
     result.sort(function (a, b) {
       return a.price.total.amount - b.price.total.amount;
@@ -46,6 +48,7 @@ function applyFilters(tickets, filters) {
     });
   }
 
+  // transfers
   if (filters.transfers.length >= 1) {
     if (filters.transfers[0] !== 0) {
       result = result.filter(function (ticket) {
@@ -62,6 +65,22 @@ function applyFilters(tickets, filters) {
         );
       });
     }
+  }
+
+  //price
+  if (filters.priceFrom !== null) {
+    result = result.filter(function (ticket) {
+      if (ticket.price.total.amount >= filters.priceFrom) {
+        return ticket;
+      }
+    });
+  }
+  if (filters.priceTo !== null) {
+    result = result.filter(function (ticket) {
+      if (ticket.price.total.amount <= filters.priceTo) {
+        return ticket;
+      }
+    });
   }
 
   return result;
