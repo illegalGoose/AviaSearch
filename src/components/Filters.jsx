@@ -1,10 +1,10 @@
+let filters = { sorting: "", transfers: [], priceFrom: null, priceTo: null };
+
 export default function Filters({
-  tickets,
-  sorting,
+  setTickets,
   defaultTickets,
   filtersFunction,
 }) {
-  let filters = { sorting: "", transfers: [], priceFrom: null, priceTo: null };
   return (
     <div style={{ fontFamily: "sans-serif", width: 200 }}>
       <div className="sorting">
@@ -13,7 +13,7 @@ export default function Filters({
           <input
             onChange={() => {
               filters.sorting = "ascending";
-              sorting(filtersFunction(tickets, filters));
+              setTickets(filtersFunction(defaultTickets, filters));
             }}
             type="radio"
             name="sorting"
@@ -24,7 +24,7 @@ export default function Filters({
           <input
             onChange={() => {
               filters.sorting = "descending";
-              sorting(filtersFunction(tickets, filters));
+              setTickets(filtersFunction(defaultTickets, filters));
             }}
             type="radio"
             name="sorting"
@@ -35,7 +35,7 @@ export default function Filters({
           <input
             onChange={() => {
               filters.sorting = "travelTime";
-              sorting(filtersFunction(tickets, filters));
+              setTickets(filtersFunction(defaultTickets, filters));
             }}
             type="radio"
             name="sorting"
@@ -45,7 +45,7 @@ export default function Filters({
         <div>
           <input
             onChange={() => {
-              sorting(defaultTickets);
+              setTickets(defaultTickets);
             }}
             type="radio"
             name="sorting"
@@ -69,7 +69,7 @@ export default function Filters({
               } else {
                 filters.transfers = [];
               }
-              sorting(filtersFunction(defaultTickets, filters));
+              setTickets(filtersFunction(defaultTickets, filters));
             }}
             type="checkbox"
             name="transfer"
@@ -90,7 +90,7 @@ export default function Filters({
               } else {
                 filters.transfers = [];
               }
-              sorting(filtersFunction(defaultTickets, filters));
+              setTickets(filtersFunction(defaultTickets, filters));
             }}
             type="checkbox"
             name="withoutTransfer"
@@ -105,8 +105,7 @@ export default function Filters({
           <input
             onChange={(event) => {
               filters.priceFrom = event.target.value;
-              console.log(filters.priceFrom);
-              filtersFunction(tickets, filters);
+              setTickets(filtersFunction(defaultTickets, filters));
             }}
             type="number"
           />
@@ -116,7 +115,7 @@ export default function Filters({
           <input
             onChange={(event) => {
               filters.priceTo = event.target.value;
-              filtersFunction(tickets, filters);
+              setTickets(filtersFunction(defaultTickets, filters));
             }}
             type="number"
           />

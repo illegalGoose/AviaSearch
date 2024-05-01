@@ -18,7 +18,6 @@ function copyArray(arr) {
 }
 
 function applyFilters(tickets, filters) {
-  console.log(filters);
   /**
    * Filters is an object like this:
    {
@@ -70,16 +69,18 @@ function applyFilters(tickets, filters) {
   //price
   if (filters.priceFrom !== null) {
     result = result.filter(function (ticket) {
-      if (ticket.price.total.amount >= filters.priceFrom) {
-        return ticket;
+      if (Number(ticket.price.total.amount) >= Number(filters.priceFrom)) {
+        return true;
       }
+      return false;
     });
   }
   if (filters.priceTo !== null) {
     result = result.filter(function (ticket) {
-      if (ticket.price.total.amount <= filters.priceTo) {
-        return ticket;
+      if (Number(ticket.price.total.amount) <= Number(filters.priceTo)) {
+        return true;
       }
+      return false;
     });
   }
 
@@ -87,12 +88,12 @@ function applyFilters(tickets, filters) {
 }
 
 export default function MainComp() {
-  const [tickets, setSorting] = useState(defaultTickets);
+  const [tickets, setTickets] = useState(defaultTickets);
   return (
     <div style={{ display: "flex", gap: 30 }}>
       <Filters
         tickets={tickets}
-        sorting={setSorting}
+        setTickets={setTickets}
         defaultTickets={defaultTickets}
         filtersFunction={applyFilters}
       />
